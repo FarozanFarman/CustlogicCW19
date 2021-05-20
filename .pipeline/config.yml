@@ -12,59 +12,28 @@
 
 ### General project setup
 general:
-  inferBuildTool: true
-  unsafeMode: false
-  projectName: 'cloud-extension-s4hana-business-process'
-  productiveBranch: 'main'
-
+  projectName: 'BpValidationS4'
+  pipeline: 'sap-cloud-sdk'    # this line is mandatory
+  buildTool: 'mta'
 
 ### Step-specific configuration
 steps:
-  mavenExecute:
-    dockerImage: devxci/mbtci:1.0.14
-
-  artifactPrepareVersion:
-    buildTool: 'mta'
-  npmExecute:
-    dockerImage: 'ppiper/node-browsers:v2'
   cloudFoundryDeploy:
-    dockerImage: 'ppiper/cf-cli'
+    cloudFoundry:
+      credentialsId: 'global'
+      apiEndpoint: 'https://api.cf.eu10.hana.ondemand.com'    # for example, https://api.cf.eu10.hana.ondemand.com
+      org: 'EngSrvVal-E2E_CustLogicMVCW19Far'
+      space: 'dev'
     mtaDeployParameters: '-f --version-rule ALL'
-  mtaBuild:
-    mtaBuildTool: "cloudMbt"
+  
+  npmExecuteLint:
+    failOnError: true
 
 
 ### Stage-specific configuration
 stages:
-  'Confirm':
-    manualConfirmation: false
-  npmAudit:
-    auditedAdvisories:
-    # high
-      - 550   
-      - 593
-      - 1184
-      - 755
-      - 1065 
-      - 1164 
-      - 1316 
-      - 1324 
-      - 1325 
-    # moderate
-      - 535
-      - 1300 
-
-
-#  Integration:
-#    credentials:
-#      - alias: 'mySystemAlias'
-#        credentialId: 'mySystemCredentialsId'
-
-Release:
-   cfTargets:
-     - org: 'EngSrvVal-E2E_CustLogicMVCW19Far'
-       space: 'dev'
-       apiEndpoint: 'https://api.cf.eu10.hana.ondemand.com'
-       appName: 'myAppName'
-       manifest: 'manifest.yml'
-       credentialsId: 'global'
+  Build:
+    npmExecuteLint: true
+   
+  Release:
+    cloudFoundryDeploy: true
