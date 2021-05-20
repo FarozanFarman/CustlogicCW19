@@ -24,7 +24,6 @@ steps:
     dockerImage: devxci/mbtci:1.0.14
 
   artifactPrepareVersion:
-    versioningType: cloud_noTag
     buildTool: 'mta'
   npmExecute:
     dockerImage: 'ppiper/node-browsers:v2'
@@ -39,7 +38,7 @@ steps:
 stages:
   'Confirm':
     manualConfirmation: false
-    npmAudit:
+  npmAudit:
     auditedAdvisories:
     # high
       - 550   
