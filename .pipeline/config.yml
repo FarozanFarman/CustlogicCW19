@@ -28,6 +28,8 @@ steps:
   
   npmExecuteLint:
     failOnError: true
+  mtaBuild:
+    mtaBuildTool: "cloudMbt"
 
 
 ### Stage-specific configuration
